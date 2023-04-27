@@ -64,7 +64,7 @@ int lgw_com_open(lgw_com_type_t com_type, const char * com_path) {
 
     /* Check input parameters */
     CHECK_NULL(com_path);
-    if ((com_type != LGW_COM_SPI) && (com_type != LGW_COM_USB)) {
+    if ((com_type != LGW_COM_SPI) && (com_type != LGW_COM_USB)) { //Add here ethernet
         DEBUG_MSG("ERROR: COMMUNICATION INTERFACE TYPE IS NOT SUPPORTED\n");
         return LGW_COM_ERROR;
     }

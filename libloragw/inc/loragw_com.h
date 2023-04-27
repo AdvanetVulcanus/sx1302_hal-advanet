@@ -38,9 +38,11 @@ License: Revised BSD License, see LICENSE.TXT file include in the project
 /* -------------------------------------------------------------------------- */
 /* --- PUBLIC TYPES --------------------------------------------------------- */
 
-typedef enum com_type_e {
+typedef enum com_type_e
+{
     LGW_COM_SPI,
     LGW_COM_USB,
+    LGW_COM_ETH,
     LGW_COM_UNKNOWN
 } lgw_com_type_t;
 

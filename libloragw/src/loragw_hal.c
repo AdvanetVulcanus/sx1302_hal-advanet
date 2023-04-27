@@ -458,7 +458,7 @@ int lgw_board_setconf(struct lgw_conf_board_s * conf) {
     }
 
     /* Check input parameters */
-    if ((conf->com_type != LGW_COM_SPI) && (conf->com_type != LGW_COM_USB)) {
+    if ((conf->com_type != LGW_COM_SPI) && (conf->com_type != LGW_COM_USB) && (conf->com_type != LGW_COM_ETH)) {
         DEBUG_MSG("ERROR: WRONG COM TYPE\n");
         return LGW_HAL_ERROR;
     }
@@ -471,11 +471,19 @@ int lgw_board_setconf(struct lgw_conf_board_s * conf) {
     strncpy(CONTEXT_COM_PATH, conf->com_path, sizeof CONTEXT_COM_PATH);
     CONTEXT_COM_PATH[sizeof CONTEXT_COM_PATH - 1] = '\0'; /* ensure string termination */
 
-    DEBUG_PRINTF("Note: board configuration: com_type: %s, com_path: %s, lorawan_public:%d, clksrc:%d, full_duplex:%d\n",   (CONTEXT_COM_TYPE == LGW_COM_SPI) ? "SPI" : "USB",
-                                                                                                                            CONTEXT_COM_PATH,
-                                                                                                                            CONTEXT_LWAN_PUBLIC,
-                                                                                                                            CONTEXT_BOARD.clksrc,
-                                                                                                                            CONTEXT_BOARD.full_duplex);
+    if (CONTEXT_COM_TYPE == LGW_COM_ETH){  /* Printing ethernet information */
+        DEBUG_PRINTF("Note: board configuration: com_type: %s, com_path: %s, lorawan_public:%d, clksrc:%d, full_duplex:%d\n", "ETH",
+                     CONTEXT_COM_PATH,
+                     CONTEXT_LWAN_PUBLIC,
+                     CONTEXT_BOARD.clksrc,
+                     CONTEXT_BOARD.full_duplex);
+    }else{
+        DEBUG_PRINTF("Note: board configuration: com_type: %s, com_path: %s, lorawan_public:%d, clksrc:%d, full_duplex:%d\n", (CONTEXT_COM_TYPE == LGW_COM_SPI) ? "SPI" : "USB",
+                     CONTEXT_COM_PATH,
+                     CONTEXT_LWAN_PUBLIC,
+                     CONTEXT_BOARD.clksrc,
+                     CONTEXT_BOARD.full_duplex);
+    }
 
     return LGW_HAL_SUCCESS;
 }

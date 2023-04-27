@@ -376,8 +376,16 @@ static int parse_SX130x_configuration(const char * conf_file) {
         boardconf.com_type = LGW_COM_SPI;
     } else if (!strncmp(str, "USB", 3) || !strncmp(str, "usb", 3)) {
         boardconf.com_type = LGW_COM_USB;
-    } else {
-        MSG("ERROR: invalid com type: %s (should be SPI or USB)\n", str);
+    }
+    else if (!strncmp(str, "
+    
+    ", 3) || !strncmp(str, "eth", 3))  //adding ethernet to the configs
+    {
+        boardconf.com_type = LGW_COM_ETH;
+    }
+    else
+    {
+        MSG("ERROR: invalid com type: %s (should be SPI or USB or ETH)\n", str);
         return -1;
     }
     com_type = boardconf.com_type;
@@ -410,7 +418,11 @@ static int parse_SX130x_configuration(const char * conf_file) {
         MSG("WARNING: Data type for full_duplex seems wrong, please check\n");
         boardconf.full_duplex = false;
     }
-    MSG("INFO: com_type %s, com_path %s, lorawan_public %d, clksrc %d, full_duplex %d\n", (boardconf.com_type == LGW_COM_SPI) ? "SPI" : "USB", boardconf.com_path, boardconf.lorawan_public, boardconf.clksrc, boardconf.full_duplex);
+    if (boardconf.com_type == LGW_COM_ETH){
+        MSG("INFO: com_type %s, com_path %s, lorawan_public %d, clksrc %d, full_duplex %d\n", "ETH", boardconf.com_path, boardconf.lorawan_public, boardconf.clksrc, boardconf.full_duplex); /* Printing ethernet information */
+    }else{
+        MSG("INFO: com_type %s, com_path %s, lorawan_public %d, clksrc %d, full_duplex %d\n", (boardconf.com_type == LGW_COM_SPI) ? "SPI" : "USB", boardconf.com_path, boardconf.lorawan_public, boardconf.clksrc, boardconf.full_duplex);
+    }
     /* all parameters parsed, submitting configuration to the HAL */
     if (lgw_board_setconf(&boardconf) != LGW_HAL_SUCCESS) {
         MSG("ERROR: Failed to configure board\n");
@@ -1343,7 +1355,7 @@ static int send_tx_ack(uint8_t token_h, uint8_t token_l, enum jit_error_e error,
         /* set error/warning type in JSON structure */
         switch (error) {
             case JIT_ERROR_FULL:
-            case JIT_ERROR_COLLISION_PACKET:
+            case JIT_ERROR_COLLISION_PACKET:]]]
                 memcpy((void *)(buff_ack + buff_index), (void *)"\"COLLISION_PACKET\"", 18);
                 buff_index += 18;
                 /* update stats */
